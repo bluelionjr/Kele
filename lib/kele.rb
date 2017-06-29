@@ -29,4 +29,15 @@ class Kele
     @mentor_sched.to_a
   end
 
+  def get_messages(page=1)
+    msg_response = self.class.get("/message_threads", headers: { authorization: @auth_token }, body: { page: page })
+    @messages = JSON.parse(msg_response.body)
+  end
+
+  def create_message(sender_email, recipient_id, subject = "", message)
+    inputs = {body: {user_id: sender_email, recipient_id: recipient_id, subject: subject, "stripped-text": message}, headers: { authorization: @auth_token }}
+    post_response = self.class.post("/messages", inputs)
+    raise "There was an error, try again." if post_response.code != 200
+  end
+
 end
