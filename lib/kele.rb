@@ -40,4 +40,15 @@ class Kele
     raise "There was an error, try again." if post_response.code != 200
   end
 
+  def create_submission(assignment_branch, assignment_commit_link, checkpoint_id, comment = "", enrollment_id=get_me['current_enrollment']['id'])
+    body = {
+      assignment_branch: assignment_branch,
+      assignment_commit_link: assignment_commit_link,
+      checkpoint_id: checkpoint_id,
+      comment: comment,
+      enrollment_id: enrollment_id
+    }
+
+    submission_response = self.class.post("/checkpoint_submissions", headers: { authorization: @auth_token }, body: body)
+  end
 end
